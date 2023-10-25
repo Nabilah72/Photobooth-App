@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.container-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    min-height: 100vh;
+    min-width: fit-content;
+}
+
+.container{
+    padding: 5px 20px 20px 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}    
+  
+  img,
+  video {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .controls {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .btn {
+    display: flex;
+    gap: 30px;
+    margin-top: 24px;
+  }
+  
+  .btn button {
+    width: 70px; /* Adjust the size as needed */
+    height: 70px; /* Adjust the size as needed */
+    border-radius: 50%; /* Makes the button round */
+    background-color:#FFCD57;
+    color: rgb(0, 0, 0);
+    font-size: 25px; /* Adjust the font size as needed */
+    cursor: pointer;
+    border: 2px solid black;
+
+  }  
+  .btn button:hover {
+    color: black;
+    background-color: transparent; 
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.navbar button {
+  margin:5px;
+  width: 60px; /* Adjust the size as needed */
+  height: 60px; /* Adjust the size as needed */
+  border-radius: 50%; /* Makes the button round */
+  background-color: transparent;
+  font-size: 20px; /* Adjust the font size as needed */
+  cursor: pointer;
+  border: none;
+  }
+  
+.navbar button:hover {
+    
+   color: black;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  
+}
+
+.navbar button.selected {
+  background-color: #FFCD57;
+  color: #000; /* Set the text color for the selected button */
+}
+
+.countdown {
+  position: fixed;
+  top: 48%; 
+  left: 52%; 
+  transform: translate(-100%, -100%); 
+  font-size: 50px; 
+  color: rgb(255, 255, 255);
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-width: 700px;
+  margin: 20px 0;
+}
+
+.photo-cell {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.photo-cell img {
+  width: 100%;
+  height: auto;
+}
+
+
+.hidden
+{
+  display: none;
+}
+
+
+

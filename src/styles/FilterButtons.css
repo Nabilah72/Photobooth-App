@@ -1,0 +1,51 @@
+/* styles/Filter.css */
+
+.filter-button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-button {
+  padding: 8px 16px;
+  background-color: transparent;
+  color: #000000;
+  border: 1px solid black;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 2px 2px 2px black;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.filter-button.selected {
+  background-color: #FFCD57;
+  color: #000;
+}
+
+.filter-button:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.filter-sepia {
+  filter: sepia(100%);
+}
+
+.filter-grayscale {
+  filter: grayscale(100%);
+}
+
+.filter-blur {
+  filter: blur(4px);
+}
+
+.filter-invert {
+  filter: invert(100%);
+}
+
+.filter-saturate {
+  filter: saturate(7);
+}
