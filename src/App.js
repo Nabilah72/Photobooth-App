@@ -4,7 +4,7 @@ import CustomWebcam from "./components/CustomWebcam";
 
 const App = () => {
   return (
-    <div className="App-background-container ">
+    <div className="App background-container">
       <CustomWebcam/>
     </div>
   );

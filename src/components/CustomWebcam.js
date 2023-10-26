@@ -2,7 +2,6 @@ import { useCallback, useRef, useState, useEffect } from "react"; // import useC
 import Webcam from "react-webcam";
 import * as htmlToImage from 'html-to-image';
 import '../styles/CustomWebcam.css'
-import rockImage from '../styles/rock.jpg';
 import CollageCountdown from "./CollageCountdown";
 import FilterButtons from "./FilterButtons";
 import cameraAudio from '../styles/camera-audio.mp3'
@@ -52,11 +51,8 @@ const CustomWebcam = () => {
 
     // Initiate the photo retake process
     const retake = () => {
-        const shouldRetake = window.confirm("Are you sure you want to retake the photo?");
-        if (shouldRetake) {
-            setImgSrc(null);
-            setCapturedPhotos([]);
-        }
+        setImgSrc(null);
+        setCapturedPhotos([]);
     };
 
     // Select the grid size for the collage
@@ -171,12 +167,7 @@ const CustomWebcam = () => {
     }, [countdown, countdownActive, capture]);
 
     return (
-        <div className="container-box"
-            style={{
-                backgroundImage: `url(${rockImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}>
+        <div className="container-box">
             <audio ref={audioRef} src={cameraAudio} />
             <div className="container" >
                 <div className={`navbar ${capturedPhotos.length > 0 ? "hidden" : ""}`}>
