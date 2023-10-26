@@ -3,7 +3,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  
 }
 
 body {
@@ -11,7 +10,7 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed; /* This keeps the background fixed while scrolling */
-  background-position: center center;
+  background-position: center;
   height: 100%;
   margin: 0;
   font-family: "Poppins", sans-serif;

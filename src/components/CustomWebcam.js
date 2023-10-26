@@ -23,6 +23,28 @@ const CustomWebcam = () => {
     const [cameraEnabled, setCameraEnabled] = useState(true);
     const [showFilterButtons, setShowFilterButtons] = useState(false);
     const [filter, setFilter] = useState("filter-none");
+    const [timer, setTimer] = useState(3); // State to store the timer value
+    const [timerActive, setTimerActive] = useState(false); // State to track if the timer is active
+
+
+    // Start the timer
+    const startTimer = () => {
+        setTimer(3); // Set the initial timer value
+        setTimerActive(true); // Activate the timer
+    };
+
+    const handleTimerTick = () => {
+        if (timer > 1) {
+            setTimer(timer - 1); // Decrement the timer value
+        } else {
+            if (capturedPhotos.length < selectedGrid) {
+                capture(); // Capture a photo
+                setTimer(3); // Reset the timer to 3 seconds
+            } else {
+                setTimerActive(false); // Stop the timer when the required number of photos is taken
+            }
+        }
+    };
 
     // Capture a photo using the webcam
     const capture = useCallback(() => {
@@ -44,7 +66,7 @@ const CustomWebcam = () => {
                 setCapturedPhotos((prevPhotos) => [...prevPhotos, imageSrc]);
                 audioRef.current.play();
                 setCollageActive(false);
-                setCameraEnabled(true);
+                // setCameraEnabled(true);
             }, 3000); // Delay of 3 seconds
         }
     }, [webcamRef, filter]);
@@ -80,36 +102,61 @@ const CustomWebcam = () => {
     };
     // Initiate the download process for photos
     const downloadSingle = () => {
-        if (imgSrc) {
-            const downloadFileName = `family-day-gfis.jpg`;
+        const downloadFileName = `family-day-gfis.jpg`;
 
-            const img = new Image();
-            img.src = imgSrc;
+        const img = new Image();
+        img.src = imgSrc;
 
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = img.width;
-                canvas.height = img.height;
+        const customWidth = 960; // Set your desired width
+        const customHeight = 720; // Set your desired height
 
-                // Apply the filter
-                if (filter !== "filter-none") { // Check if filter is not default
-                    ctx.filter = window.getComputedStyle(document.querySelector('.photo-preview img')).filter;
-                }
+        img.onload = () => {
 
-                // Draw the image with the applied filter
-                ctx.drawImage(img, 0, 0, img.width, img.height);
+        
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            console.log("Image Dimensions: ", img.width, img.height);
+            console.log("Canvas Dimensions: ", canvas.width, canvas.height);
+            // Calculate the new dimensions while maintaining the aspect ratio
+            const aspectRatio = img.width / img.height;
 
-                // Convert the canvas content to a data URL
-                const filteredImgSrc = canvas.toDataURL('image/jpeg', 0.8);
+            let newWidth, newHeight;
 
-                const a = document.createElement('a');
-                a.href = filteredImgSrc;
-                a.download = downloadFileName;
-                a.click();
-            };
+            if (aspectRatio > customWidth / customHeight) {
+                newWidth = customWidth;
+                newHeight = customWidth / aspectRatio;
+            } else {
+                newWidth = customHeight * aspectRatio;
+                newHeight = customHeight;
+            }
+
+            // Set the canvas dimensions to the calculated dimensions
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            // Apply the filter
+            if (filter !== "filter-none") {
+                ctx.filter = window.getComputedStyle(document.querySelector('.photo-preview img')).filter;
+            }
+
+            // Calculate the position to center the image
+            const offsetX = (customWidth - newWidth) / 2;
+            const offsetY = (customHeight - newHeight) / 2;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the image with the applied filter and calculated dimensions
+            ctx.drawImage(img, offsetX, offsetY, newWidth, newHeight);
+
+            // Convert the canvas content to a data URL
+            const filteredImgSrc = canvas.toDataURL('image/jpeg', 0.8);
+
+            const a = document.createElement('a');
+            a.href = filteredImgSrc;
+            a.download = downloadFileName;
+            a.click();
         }
     };
+
 
     const downloadCollage = () => {
         // Download the collage if photos are captured
@@ -220,21 +267,17 @@ const CustomWebcam = () => {
                     </div>
                 ) : (
                     <Webcam
-                        height={400}
-                        width={700}
+                        width={960}
+                        height={720}
                         ref={webcamRef}
                         mirrored={mirrored}
                         screenshotFormat="image/jpeg" //image format
-                        screenshotQuality={1.0} //image quality
+                        screenshotQuality={0.92} //image quality
                         className={filter} />
                 )}
 
                 {countdownActive && countdown > 0 && (
                     <div className="countdown">{countdown}</div>
-                )}
-
-                {collageActive && (
-                    <CollageCountdown seconds={3} photoTaken={true} />
                 )}
 
                 {selectedButton === 4 || selectedButton === 6 ? null : (
