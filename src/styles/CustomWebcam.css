@@ -78,6 +78,7 @@
 }
 
 .countdown {
+ background-color: black;
   position: fixed;
   top: 48%; 
   left: 52%; 

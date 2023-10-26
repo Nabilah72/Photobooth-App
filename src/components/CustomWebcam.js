@@ -2,7 +2,6 @@ import { useCallback, useRef, useState, useEffect } from "react"; // import useC
 import Webcam from "react-webcam";
 import * as htmlToImage from 'html-to-image';
 import '../styles/CustomWebcam.css'
-import CollageCountdown from "./CollageCountdown";
 import FilterButtons from "./FilterButtons";
 import cameraAudio from '../styles/camera-audio.mp3'
 
@@ -23,28 +22,7 @@ const CustomWebcam = () => {
     const [cameraEnabled, setCameraEnabled] = useState(true);
     const [showFilterButtons, setShowFilterButtons] = useState(false);
     const [filter, setFilter] = useState("filter-none");
-    const [timer, setTimer] = useState(3); // State to store the timer value
-    const [timerActive, setTimerActive] = useState(false); // State to track if the timer is active
-
-
-    // Start the timer
-    const startTimer = () => {
-        setTimer(3); // Set the initial timer value
-        setTimerActive(true); // Activate the timer
-    };
-
-    const handleTimerTick = () => {
-        if (timer > 1) {
-            setTimer(timer - 1); // Decrement the timer value
-        } else {
-            if (capturedPhotos.length < selectedGrid) {
-                capture(); // Capture a photo
-                setTimer(3); // Reset the timer to 3 seconds
-            } else {
-                setTimerActive(false); // Stop the timer when the required number of photos is taken
-            }
-        }
-    };
+    const [collageTimer, setCollageTimer] = useState(3);
 
     // Capture a photo using the webcam
     const capture = useCallback(() => {
@@ -65,16 +43,20 @@ const CustomWebcam = () => {
                 setCapturedPhotosStyle((capturedPhotosStyle) => [...capturedPhotosStyle, filter]);
                 setCapturedPhotos((prevPhotos) => [...prevPhotos, imageSrc]);
                 audioRef.current.play();
-                setCollageActive(false);
-                // setCameraEnabled(true);
+                setCollageTimer(3);
+
             }, 3000); // Delay of 3 seconds
         }
     }, [webcamRef, filter]);
 
     // Initiate the photo retake process
     const retake = () => {
+
         setImgSrc(null);
         setCapturedPhotos([]);
+        setCollageActive(false); // Disable the collage mode
+        setCameraEnabled(true); // Enable the camera
+        setCollageTimer(3);
     };
 
     // Select the grid size for the collage
@@ -112,7 +94,7 @@ const CustomWebcam = () => {
 
         img.onload = () => {
 
-        
+
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             console.log("Image Dimensions: ", img.width, img.height);
@@ -197,10 +179,11 @@ const CustomWebcam = () => {
     };
 
 
-
     // Effect for countdown
+    // Combine the countdown timer and collage timer logic into one useEffect
     useEffect(() => {
         let timer;
+
         if (countdownActive && countdown > 0) {
             timer = setInterval(() => {
                 setCountdown(countdown - 1);
@@ -209,9 +192,26 @@ const CustomWebcam = () => {
             audioRef.current.play();
             capture();
             stopCountdown();
+        } else if (collageActive && capturedPhotos.length < selectedGrid) {
+            // Collage timer logic
+            if (collageTimer > 0) {
+                timer = setInterval(() => {
+                    setCollageTimer(collageTimer - 1);
+                }, 1000);
+            } else if (collageTimer === 0) {
+                // Take a photo when the collage timer reaches 0
+                const imageSrc = webcamRef.current.getScreenshot();
+                setCapturedPhotosStyle((capturedPhotosStyle) => [...capturedPhotosStyle, filter]);
+                setCapturedPhotos((prevPhotos) => [...prevPhotos, imageSrc]);
+                audioRef.current.play();
+                setCollageTimer(3); // Reset the collage timer to 3 seconds
+            }
         }
+
+        // Clear the timer when needed
         return () => clearInterval(timer);
-    }, [countdown, countdownActive, capture]);
+    }, [countdown, countdownActive, capture, collageActive, collageTimer, capturedPhotos, selectedGrid, filter]);
+
 
     return (
         <div className="container-box">
@@ -298,6 +298,12 @@ const CustomWebcam = () => {
                                 <button onClick={capture}><i className="bi bi-camera-fill"></i></button>
                             )
                         )}
+                    </div>
+                )}
+
+                {collageActive && capturedPhotos.length < selectedGrid && (
+                    <div className={`countdown ${collageTimer === 0 ? "hidden" : ""}`}>
+                        {collageTimer}
                     </div>
                 )}
 
