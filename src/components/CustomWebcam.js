@@ -39,6 +39,7 @@ const CustomWebcam = () => {
     };
 
     const [cammode, setCammode] = useState(null);
+    const [userClickedToggle, setUserClickedToggle] = useState(false);
 
     //-------------------
 
@@ -205,9 +206,14 @@ const CustomWebcam = () => {
     };
 
     const toggleCameraMode = () => {
-        setCammode((prevMode) => (prevMode === vcUser ? vcEnv : vcUser));
+        if (userClickedToggle) {
+            setCammode((prevMode) => (prevMode === vcUser ? vcEnv : vcUser));
+        } else {
+            // If it's the first click, set the initial mode to vcUser
+            setCammode(vcUser);
+            setUserClickedToggle(true);
+        }
     };
-
     // Effect for countdown
     // Combine the countdown timer and collage timer logic into one useEffect
     useEffect(() => {
