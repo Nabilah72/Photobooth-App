@@ -22,7 +22,7 @@ const CustomWebcam = () => {
     const [cameraEnabled, setCameraEnabled] = useState(true);
     const [showFilterButtons, setShowFilterButtons] = useState(false);
     const [filter, setFilter] = useState("filter-none");
-    const [collageTimer, setCollageTimer] = useState(3);
+    const [collageTimer, setCollageTimer] = useState(5);
 
     //en onn tambah
     const vcUser = {
@@ -33,9 +33,6 @@ const CustomWebcam = () => {
     };
 
     const [cammode, setCammode] = useState(vcUser);
-
-
-
 
     //-------------------
 
@@ -58,9 +55,9 @@ const CustomWebcam = () => {
                 setCapturedPhotosStyle((capturedPhotosStyle) => [...capturedPhotosStyle, filter]);
                 setCapturedPhotos((prevPhotos) => [...prevPhotos, imageSrc]);
                 audioRef.current.play();
-                setCollageTimer(3);
+                // setCollageTimer(5);
 
-            }, 3000); // Delay of 3 seconds
+            }); // Delay of 3 seconds
         }
     }, [webcamRef, filter]);
 
@@ -71,7 +68,7 @@ const CustomWebcam = () => {
         setCapturedPhotos([]);
         setCollageActive(false); // Disable the collage mode
         setCameraEnabled(true); // Enable the camera
-        setCollageTimer(3);
+        setCollageTimer(5);
     };
 
     // Select the grid size for the collage
@@ -193,6 +190,9 @@ const CustomWebcam = () => {
         setShowFilterButtons((prev) => !prev);
     };
 
+    const toggleCameraMode = () => {
+        setCammode(cammode === vcUser ? vcEnv : vcUser);
+    };
 
     // Effect for countdown
     // Combine the countdown timer and collage timer logic into one useEffect
@@ -219,7 +219,7 @@ const CustomWebcam = () => {
                 setCapturedPhotosStyle((capturedPhotosStyle) => [...capturedPhotosStyle, filter]);
                 setCapturedPhotos((prevPhotos) => [...prevPhotos, imageSrc]);
                 audioRef.current.play();
-                setCollageTimer(3); // Reset the collage timer to 3 seconds
+                setCollageTimer(5); // Reset the collage timer to 5 seconds
             }
         }
 
@@ -270,8 +270,8 @@ const CustomWebcam = () => {
 
                             <button onClick={toggleFilterButtons}><i className="bi bi-magic"></i></button>
                             <button onClick={toggleMirror}><i className="bi bi-symmetry-vertical"></i></button>
-                            <button onClick={() => { setCammode(vcEnv) }}>Set Env</button>
-                            <button onClick={() => { setCammode(vcUser) }}>Set User</button>
+                            {/* <button onClick={() => { setCammode(vcEnv) }}>Set Env</button>
+                            <button onClick={() => { setCammode(vcUser) }}>Set User</button> */}
 
                         </>
                     )}
@@ -315,7 +315,12 @@ const CustomWebcam = () => {
                                     <button onClick={downloadSingle}><i className="bi bi-floppy2"></i></button>
                                 </>
                             ) : (
-                                <button onClick={capture}><i className="bi bi-camera-fill"></i></button>
+                                <>
+                                    <div className="flip">
+                                        <button onClick={toggleCameraMode}><i className="bi bi-arrow-repeat"></i></button>
+                                    </div>
+                                    <button onClick={capture}><i className="bi bi-camera-fill"></i></button>
+                                </>
                             )
                         )}
                     </div>
@@ -329,11 +334,14 @@ const CustomWebcam = () => {
 
                 <div className="btn">
                     {capturedPhotos.length < selectedGrid && (selectedButton === 4 || selectedButton === 6) &&
-                        (
+                        (<>
+                            <div className="flip">
+                                <button onClick={toggleCameraMode}><i className="bi bi-arrow-repeat"></i></button>
+                            </div>
                             <button onClick={collage} disabled={!cameraEnabled}
                                 style={{ backgroundColor: !cameraEnabled ? 'grey' : '', color: !cameraEnabled ? 'lightgrey' : '' }}>
                                 <i className="bi bi-camera-fill"></i></button>
-
+                        </>
                         )}
 
                     {capturedPhotos.length === selectedGrid && (
