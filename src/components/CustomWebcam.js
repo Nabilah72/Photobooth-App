@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, useEffect } from "react"; // import useCallback
+import { useCallback, useRef, useState, useEffect, useMemo } from "react"; // import useCallback
 import Webcam from "react-webcam";
 import * as htmlToImage from 'html-to-image';
 import '../styles/CustomWebcam.css'
@@ -31,14 +31,7 @@ const CustomWebcam = () => {
 
 
     //en onn tambah
-    const vcUser = {
-        facingMode: "user"
-    };
-    const vcEnv = {
-        facingMode: { exact: "environment" }
-    };
 
-    const [cammode, setCammode] = useState(vcUser);
 
     //-------------------
 
@@ -204,13 +197,21 @@ const CustomWebcam = () => {
         setShowFilterButtons((prev) => !prev);
     };
 
-    const toggleCameraMode = () => {
-        if (cammode === vcUser) {
-            setCammode(vcEnv);
-        } else {
-            setCammode(vcUser);
-        }
-    };
+    const vcUser = useMemo(() => ({
+        facingMode: "user"
+    }), []);
+
+    const vcEnv = useMemo(() => ({
+        facingMode: { exact: "environment" }
+    }), []);
+
+    const [cammode, setCammode] = useState(vcUser);
+
+    // ...
+
+    const toggleCameraMode = useCallback(() => {
+        setCammode((prevMode) => (prevMode === vcUser ? vcEnv : vcUser));
+    }, [vcEnv, vcUser]);
 
     // Effect for countdown
     // Combine the countdown timer and collage timer logic into one useEffect
