@@ -49,11 +49,6 @@
     border: 2px solid black;
 
   }  
-  .btn button:hover {
-    color: black;
-    background-color: transparent; 
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
 
 .navbar button {
   margin:5px;
@@ -65,12 +60,6 @@
   cursor: pointer;
   border: none;
   }
-  
-.navbar button:hover {
-    
-   color: black;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  
-}
 
 .navbar button.selected {
   background-color: #FFCD57;

@@ -3,10 +3,15 @@ import Webcam from "react-webcam";
 import * as htmlToImage from 'html-to-image';
 import '../styles/CustomWebcam.css'
 import FilterButtons from "./FilterButtons";
-import cameraAudio from '../styles/camera-audio.mp3'
+import cameraAudio from '../assets/camera-audio.mp3'
+import timerCount5 from '../assets/timer-count5.mp3'
+import timerCount3 from '../assets/timer-count3.mp3'
+
 
 const CustomWebcam = () => {
-    const audioRef = useRef(null); // audio reference 
+    const audioRef = useRef(null);
+    const audioRef1 = useRef(null);
+    const audioRef2 = useRef(null);
     const webcamRef = useRef(null); // create a webcam reference
     const [imgSrc, setImgSrc] = useState(null); // initialize image
     const [mirrored, setMirrored] = useState([]); //Initialize mirrored state
@@ -23,6 +28,7 @@ const CustomWebcam = () => {
     const [showFilterButtons, setShowFilterButtons] = useState(false);
     const [filter, setFilter] = useState("filter-none");
     const [collageTimer, setCollageTimer] = useState(5);
+
 
     //en onn tambah
     const vcUser = {
@@ -46,6 +52,7 @@ const CustomWebcam = () => {
     // Initiate the collage function
     const collage = useCallback(() => {
         setCollageActive(true);
+        audioRef1.current.play();
         setCameraEnabled(false); // Disable the camera
 
         // Capture a photo using the webcam after a delay
@@ -54,21 +61,20 @@ const CustomWebcam = () => {
                 const imageSrc = webcamRef.current.getScreenshot();
                 setCapturedPhotosStyle((capturedPhotosStyle) => [...capturedPhotosStyle, filter]);
                 setCapturedPhotos((prevPhotos) => [...prevPhotos, imageSrc]);
+                audioRef1.current.play();
                 audioRef.current.play();
-                // setCollageTimer(5);
+                setCollageTimer(5);
 
-            }); // Delay of 3 seconds
+            }, 5000);
         }
     }, [webcamRef, filter]);
 
     // Initiate the photo retake process
     const retake = () => {
-
         setImgSrc(null);
         setCapturedPhotos([]);
         setCollageActive(false); // Disable the collage mode
         setCameraEnabled(true); // Enable the camera
-        setCollageTimer(5);
     };
 
     // Select the grid size for the collage
@@ -170,6 +176,14 @@ const CustomWebcam = () => {
         setCountdown(seconds);
         setCountdownActive(true);
         setShowCountdown(false);
+        audioRef2.current.play();
+    };
+
+    const startCountdown1 = (seconds) => {
+        setCountdown(seconds);
+        setCountdownActive(true);
+        setShowCountdown(false);
+        audioRef1.current.play();
     };
 
     const stopCountdown = () => {
@@ -191,7 +205,9 @@ const CustomWebcam = () => {
     };
 
     const toggleCameraMode = () => {
-        setCammode((prevMode) => (prevMode === vcUser ? vcEnv : vcUser));
+        setCammode((prevMode) => {
+            return prevMode === vcUser ? vcEnv : vcUser;
+        });
     };
 
     // Effect for countdown
@@ -203,16 +219,21 @@ const CustomWebcam = () => {
             timer = setInterval(() => {
                 setCountdown(countdown - 1);
             }, 1000);
+
         } else if (countdownActive && countdown === 0) {
             audioRef.current.play();
             capture();
             stopCountdown();
+
         } else if (collageActive && capturedPhotos.length < selectedGrid) {
             // Collage timer logic
             if (collageTimer > 0) {
+
                 timer = setInterval(() => {
                     setCollageTimer(collageTimer - 1);
                 }, 1000);
+                audioRef1.current.play()
+
             } else if (collageTimer === 0) {
                 // Take a photo when the collage timer reaches 0
                 const imageSrc = webcamRef.current.getScreenshot();
@@ -231,6 +252,9 @@ const CustomWebcam = () => {
     return (
         <div className="container-box">
             <audio ref={audioRef} src={cameraAudio} />
+            <audio ref={audioRef1} src={timerCount5} />
+            <audio ref={audioRef2} src={timerCount3} />
+
             <div className="container" >
                 <div className={`navbar ${capturedPhotos.length > 0 ? "hidden" : ""}`}>
                     {!imgSrc && (
@@ -245,7 +269,7 @@ const CustomWebcam = () => {
                             {showCountdown && (
                                 <>
                                     <button onClick={() => startCountdown(3)} ><i className="bi bi-3-circle-fill"></i></button>
-                                    <button onClick={() => startCountdown(5)} ><i className="bi bi-5-circle-fill"></i></button>
+                                    <button onClick={() => startCountdown1(5)} ><i className="bi bi-5-circle-fill"></i></button>
                                 </>
                             )}
 
@@ -267,9 +291,9 @@ const CustomWebcam = () => {
                                     </button>
                                 </>
                             )}
-
                             <button onClick={toggleFilterButtons}><i className="bi bi-magic"></i></button>
                             <button onClick={toggleMirror}><i className="bi bi-symmetry-vertical"></i></button>
+                            <button onClick={toggleCameraMode}><i className="bi bi-arrow-repeat"></i></button>
                             {/* <button onClick={() => { setCammode(vcEnv) }}>Set Env</button>
                             <button onClick={() => { setCammode(vcUser) }}>Set User</button> */}
 
@@ -316,7 +340,6 @@ const CustomWebcam = () => {
                                 </>
                             ) : (
                                 <>
-                                    <button onClick={toggleCameraMode}><i className="bi bi-arrow-repeat"></i></button>
                                     <button onClick={capture}><i className="bi bi-camera-fill"></i></button>
                                 </>
                             )
@@ -333,7 +356,6 @@ const CustomWebcam = () => {
                 <div className="btn">
                     {capturedPhotos.length < selectedGrid && (selectedButton === 4 || selectedButton === 6) &&
                         (<>
-                            <button onClick={toggleCameraMode}><i className="bi bi-arrow-repeat"></i></button>
                             <button onClick={collage} disabled={!cameraEnabled}
                                 style={{ backgroundColor: !cameraEnabled ? 'grey' : '', color: !cameraEnabled ? 'lightgrey' : '' }}>
                                 <i className="bi bi-camera-fill"></i></button>
