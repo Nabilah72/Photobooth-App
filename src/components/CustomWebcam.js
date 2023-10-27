@@ -38,7 +38,7 @@ const CustomWebcam = () => {
         facingMode: { exact: "environment" }
     };
 
-    const [cammode, setCammode] = useState(vcUser);
+    const [cammode, setCammode] = useState(null);
 
     //-------------------
 
@@ -65,7 +65,7 @@ const CustomWebcam = () => {
                 audioRef.current.play();
                 setCollageTimer(5);
 
-            }, 5000);
+            }, 5200);
         }
     }, [webcamRef, filter]);
 
@@ -205,9 +205,7 @@ const CustomWebcam = () => {
     };
 
     const toggleCameraMode = () => {
-        setCammode((prevMode) => {
-            return prevMode === vcUser ? vcEnv : vcUser;
-        });
+        setCammode((prevMode) => (prevMode === vcUser ? vcEnv : vcUser));
     };
 
     // Effect for countdown
@@ -293,7 +291,6 @@ const CustomWebcam = () => {
                             )}
                             <button onClick={toggleFilterButtons}><i className="bi bi-magic"></i></button>
                             <button onClick={toggleMirror}><i className="bi bi-symmetry-vertical"></i></button>
-                            <button onClick={toggleCameraMode}><i className="bi bi-arrow-repeat"></i></button>
                             {/* <button onClick={() => { setCammode(vcEnv) }}>Set Env</button>
                             <button onClick={() => { setCammode(vcUser) }}>Set User</button> */}
 
@@ -340,6 +337,7 @@ const CustomWebcam = () => {
                                 </>
                             ) : (
                                 <>
+                                    <button onClick={toggleCameraMode}><i className="bi bi-arrow-repeat"></i></button>
                                     <button onClick={capture}><i className="bi bi-camera-fill"></i></button>
                                 </>
                             )
@@ -356,6 +354,7 @@ const CustomWebcam = () => {
                 <div className="btn">
                     {capturedPhotos.length < selectedGrid && (selectedButton === 4 || selectedButton === 6) &&
                         (<>
+                            <button onClick={toggleCameraMode}><i className="bi bi-arrow-repeat"></i></button>
                             <button onClick={collage} disabled={!cameraEnabled}
                                 style={{ backgroundColor: !cameraEnabled ? 'grey' : '', color: !cameraEnabled ? 'lightgrey' : '' }}>
                                 <i className="bi bi-camera-fill"></i></button>
