@@ -316,9 +316,7 @@ const CustomWebcam = () => {
                                 </>
                             ) : (
                                 <>
-                                    <div className="flip">
-                                        <button onClick={toggleCameraMode}><i className="bi bi-arrow-repeat"></i></button>
-                                    </div>
+                                    <button onClick={toggleCameraMode}><i className="bi bi-arrow-repeat"></i></button>
                                     <button onClick={capture}><i className="bi bi-camera-fill"></i></button>
                                 </>
                             )
@@ -335,9 +333,7 @@ const CustomWebcam = () => {
                 <div className="btn">
                     {capturedPhotos.length < selectedGrid && (selectedButton === 4 || selectedButton === 6) &&
                         (<>
-                            <div className="flip">
-                                <button onClick={toggleCameraMode}><i className="bi bi-arrow-repeat"></i></button>
-                            </div>
+                            <button onClick={toggleCameraMode}><i className="bi bi-arrow-repeat"></i></button>
                             <button onClick={collage} disabled={!cameraEnabled}
                                 style={{ backgroundColor: !cameraEnabled ? 'grey' : '', color: !cameraEnabled ? 'lightgrey' : '' }}>
                                 <i className="bi bi-camera-fill"></i></button>
