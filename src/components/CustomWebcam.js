@@ -210,7 +210,7 @@ const CustomWebcam = () => {
             setCammode((prevMode) => (prevMode === vcUser ? vcEnv : vcUser));
         } else {
             // If it's the first click, set the initial mode to vcUser
-            setCammode(vcUser);
+            setCammode(null);
             setUserClickedToggle(true);
         }
     };
