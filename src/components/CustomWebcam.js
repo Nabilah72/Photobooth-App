@@ -268,7 +268,7 @@ const CustomWebcam = () => {
                 ) : (
                     <Webcam
                         width={900}
-                        height={600}
+                        height={500}
                         ref={webcamRef}
                         mirrored={mirrored}
                         screenshotFormat="image/jpeg" //image format
