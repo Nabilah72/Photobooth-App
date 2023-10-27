@@ -191,7 +191,7 @@ const CustomWebcam = () => {
     };
 
     const toggleCameraMode = () => {
-        setCammode(cammode === vcUser ? vcEnv : vcUser);
+        setCammode((prevMode) => (prevMode === vcUser ? vcEnv : vcUser));
     };
 
     // Effect for countdown
