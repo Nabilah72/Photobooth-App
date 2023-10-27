@@ -38,8 +38,7 @@ const CustomWebcam = () => {
         facingMode: { exact: "environment" }
     };
 
-    const [cammode, setCammode] = useState(null);
-    const [userClickedToggle, setUserClickedToggle] = useState(false);
+    const [cammode, setCammode] = useState(vcUser);
 
     //-------------------
 
@@ -66,7 +65,7 @@ const CustomWebcam = () => {
                 audioRef.current.play();
                 setCollageTimer(5);
 
-            }, 5200);
+            }, 5000);
         }
     }, [webcamRef, filter]);
 
@@ -206,14 +205,13 @@ const CustomWebcam = () => {
     };
 
     const toggleCameraMode = () => {
-        if (userClickedToggle) {
-            setCammode((prevMode) => (prevMode === vcUser ? vcEnv : vcUser));
+        if (cammode === vcUser) {
+            setCammode(vcEnv);
         } else {
-            // If it's the first click, set the initial mode to vcUser
-            setCammode(null);
-            setUserClickedToggle(true);
+            setCammode(vcUser);
         }
     };
+
     // Effect for countdown
     // Combine the countdown timer and collage timer logic into one useEffect
     useEffect(() => {
