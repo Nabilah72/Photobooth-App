@@ -24,6 +24,21 @@ const CustomWebcam = () => {
     const [filter, setFilter] = useState("filter-none");
     const [collageTimer, setCollageTimer] = useState(3);
 
+    //en onn tambah
+    const vcUser = {
+        facingMode: "user"
+    };
+    const vcEnv = {
+        facingMode: { exact: "environment" }
+    };
+
+    const [cammode, setCammode] = useState(vcUser);
+
+
+
+
+    //-------------------
+
     // Capture a photo using the webcam
     const capture = useCallback(() => {
         audioRef.current.play();
@@ -255,6 +270,9 @@ const CustomWebcam = () => {
 
                             <button onClick={toggleFilterButtons}><i className="bi bi-magic"></i></button>
                             <button onClick={toggleMirror}><i className="bi bi-symmetry-vertical"></i></button>
+                            <button onClick={() => { setCammode(vcEnv) }}>Set Env</button>
+                            <button onClick={() => { setCammode(vcUser) }}>Set User</button>
+
                         </>
                     )}
                 </div>
@@ -273,7 +291,9 @@ const CustomWebcam = () => {
                         mirrored={mirrored}
                         screenshotFormat="image/jpeg" //image format
                         screenshotQuality={0.92} //image quality
-                        className={filter} />
+                        className={filter}
+                        videoConstraints={cammode}
+                    />
                 )}
 
                 {countdownActive && countdown > 0 && (
