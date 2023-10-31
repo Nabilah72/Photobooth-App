@@ -303,7 +303,7 @@ const CustomWebcam = () => {
                     )}
                 </div>
 
-                {showFilterButtons && (<FilterButtons applyFilter={applyFilter} removeFilter={removeFilter} />)}
+                {showFilterButtons && (<FilterButtons applyFilter={applyFilter} removeFilter={removeFilter} activeFilter={filter} />)}
 
                 {imgSrc ? (
                     <div className="photo-preview">

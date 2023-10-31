@@ -6,7 +6,7 @@
 }
 
 body {
-  background-image: url('./styles/rock.jpg'); /* Adjust the path as needed */
+  background-image: url('./images/rock.jpg'); /* Adjust the path as needed */
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed; /* This keeps the background fixed while scrolling */
