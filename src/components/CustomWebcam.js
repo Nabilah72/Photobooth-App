@@ -95,7 +95,7 @@ const CustomWebcam = () => {
     };
     // Initiate the download process for photos
     const downloadSingle = () => {
-        const downloadFileName = `family-day-gfis.jpg`;
+        const downloadFileName = `single-photo.jpg`;
 
         const img = new Image();
         img.src = imgSrc;
@@ -158,7 +158,7 @@ const CustomWebcam = () => {
             .then(function (dataUrl) {
                 const a = document.createElement('a');
                 a.href = dataUrl;
-                a.download = 'family_day.jpeg';
+                a.download = 'collage-photo.jpeg';
                 a.click();
             });
     };
@@ -296,8 +296,6 @@ const CustomWebcam = () => {
                             )}
                             <button onClick={toggleFilterButtons}><i className="bi bi-magic"></i></button>
                             <button onClick={toggleMirror}><i className="bi bi-symmetry-vertical"></i></button>
-                            {/* <button onClick={() => { setCammode(vcEnv) }}>Set Env</button>
-                            <button onClick={() => { setCammode(vcUser) }}>Set User</button> */}
 
                         </>
                     )}
