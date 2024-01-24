@@ -94,7 +94,7 @@ const CustomWebcam = () => {
         setFilter("filter-none"); // Reset to default filter when removing
     };
     // Initiate the download process for photos
-    const downloadSingle = () => {
+    const downloadSingle = () => {  
         const downloadFileName = `single-photo.jpg`;
 
         const img = new Image();
